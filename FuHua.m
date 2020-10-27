@@ -1,23 +1,25 @@
 function [s,s1,s2,m1,m2]=FuHua(a,b,n)
 	h=(b-a)/n;
     syms x;
+    d=7;  %ä¿ç•™æœ‰æ•ˆä½æ•°
     
-%     fx=x/(4+x*x);  %2.(1)±»»ıº¯Êı
-    fx=(x)^(1/2);  %2.(3)±»»ıº¯Êı
+    fx=x/(4+x*x);  %2.(1)è¢«ç§¯å‡½æ•°
+%     fx=(x)^(1/2);  %2.(3)è¢«ç§¯å‡½æ•°
+%     fx=sinx/x;  %æ–¹æ¡ˆ1
 
-	s=vpa(int(fx,x,a,b),6);
+	s=vpa(int(fx,x,a,b),d);
     s1=0;
-    for i=0:n-1 %ÌİĞÎ¸´ÔÓ»¯
+    for i=0:n-1 %æ¢¯å½¢å¤æ‚åŒ–
         s1=s1+h/2*(subs(fx,{x},{a+i*h})+subs(fx,(x),{a+i*h+h}));
-    end
-    s1=vpa(s1,6);
-    m1=double(vpa(s-s1,6));
+    end 
+    m1=roundn(double(s1-s),-d-1);
+    s1=vpa(s1,d);
     
     s2=0;
-    for i=0:n-1  %Simpson¸´»¯
-        s2=s2+h/6*(subs(fx,{x},{a+i*h})+4*subs(fx,{x},{a+(i+1/2)*h})...
-            +subs(fx,{x},{a+(i+1)*h}));
+    for i=0:n/2-1  %Simpsonå¤åŒ–
+        s2=s2+h/3*(subs(fx,{x},{a+2*i*h})+4*subs(fx,{x},{a+(2*i+1)*h})...
+            +subs(fx,{x},{a+(2*i+2)*h}));
     end
-    s2=vpa(s2,6);
-    m2=double(vpa(s-s2,6));
+    m2=roundn(double(s2-s),-d-1);
+    s2=vpa(s2,d);
 end
